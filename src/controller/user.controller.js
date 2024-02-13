@@ -21,8 +21,6 @@ const generateAccessAndRefereshTokens = async (userId) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body
 
-  console.log(email, password)
-
   if (!email) {
     throw new ApiError(400, "email is required")
   }
@@ -47,7 +45,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const options = {
     httpOnly: true,
-    secure: true
+    // secure: true
   }
 
   return res
@@ -59,7 +57,7 @@ const loginUser = asyncHandler(async (req, res) => {
         {
           user: loggedInUser, accessToken
         },
-        "User logged In Successfully"
+        "User logged In Successfullyuser"
       )
     )
 
@@ -102,9 +100,22 @@ const registerUser = asyncHandler(async (req, res) => {
   )
 })
 
+const logoutUser = asyncHandler(async (req, res) => {
+
+  const options = {
+    httpOnly: true,
+    // secure: true
+  }
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .json(new ApiResponse(200, {}, "User logged Out"))
+})
 
 export {
   registerUser,
-  loginUser
+  loginUser,
+  logoutUser
 }
 
