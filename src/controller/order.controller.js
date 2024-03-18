@@ -9,16 +9,16 @@ const placeOrder = asyncHandler(async (req, res) => {
 
   const { productName, productQuantity, pickupLocation, pickUpAddress, dropLocation, dropAddress, productType } = req.body;
 
-  if (!productName || !productQuantity || !pickupLocation || !dropLocation || !productType) {
+  if (!productName || !productQuantity || !pickUpAddress || !dropAddress || !productType) {
     throw new ApiError(400, "Missing required order fields");
   }
 
   const newOrder = await Order.create({
     productName,
     productQuantity,
-    pickupLocation,
     pickUpAddress,
-    dropLocation,
+    dropLocation: dropLocation || null,
+    pickupLocation: pickupLocation || null,
     dropAddress,
     productType,
     orderStatus: "PENDING",
@@ -65,10 +65,34 @@ const getMyOrders = asyncHandler(async (req, res) => {
   }
 })
 
+const getDashboardData = asyncHandler(async (req, res) => {
+  try {
+    const totalOrders = await Order.countDocuments();
+    const totalUsers = await User.countDocuments();
+
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          {
+            totalOrders,
+            totalUsers
+          },
+          'Dashboard Data sent successfully'
+        )
+      )
+
+
+  } catch (error) {
+    throw new ApiError(401, error?.message || "There was some error while returning the dashboard data.")
+  }
+})
+
 const getAllOrders = asyncHandler(async (req, res) => {
 
   try {
-    Order.find({}).then((orders) => {
+    Order.find({}).populate('owner', 'fullName').then((orders) => {
       return res
         .status(200)
         .json(
@@ -118,5 +142,6 @@ export {
   placeOrder,
   getAllOrders,
   getMyOrders,
-  updateOrder
+  updateOrder,
+  getDashboardData
 }

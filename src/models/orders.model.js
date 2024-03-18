@@ -24,14 +24,14 @@ const orderSchema = new Schema(
     },
     pickupLocation: {
       type: pointSchema,
-      required: true
+      required: false
     },
     pickUpAddress: {
       type: String
     },
     dropLocation: {
       type: pointSchema,
-      required: true
+      required: false
     },
     dropAddress: {
       type: String,

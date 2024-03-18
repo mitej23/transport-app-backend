@@ -57,7 +57,7 @@ const loginUser = asyncHandler(async (req, res) => {
         {
           user: loggedInUser, accessToken
         },
-        "User logged In Successfullyuser"
+        "User logged In Successfully"
       )
     )
 
@@ -103,7 +103,7 @@ const registerUser = asyncHandler(async (req, res) => {
 const logoutUser = asyncHandler(async (req, res) => {
 
   const options = {
-    httpOnly: true,
+    // httpOnly: true,
     // secure: true
   }
 
