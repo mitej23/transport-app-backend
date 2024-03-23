@@ -17,8 +17,14 @@ const placeOrder = asyncHandler(async (req, res) => {
     productName,
     productQuantity,
     pickUpAddress,
-    dropLocation: dropLocation || null,
-    pickupLocation: pickupLocation || null,
+    dropLocation: dropLocation ? {
+      "type": "Point",
+      "coordinates": [dropLocation?.longitude, dropLocation?.latitude]
+    } : null,
+    pickupLocation: pickupLocation ? {
+      "type": "Point",
+      "coordinates": [pickupLocation?.longitude, pickupLocation?.latitude]
+    } : null,
     dropAddress,
     productType,
     orderStatus: "PENDING",
